@@ -6,7 +6,7 @@ import (
 )
 
 type Order struct {
-	ID    int     `json:"id"`
+	ID    uint     `json:"id"`
 	NumberOrder    string     `json:"number_order"`
 	ClientName    string     `json:"client_name"`
 	Pizzas    []*pizza.Pizza     `json:"pizzas"`

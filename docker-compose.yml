@@ -12,8 +12,8 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: "fightCartel2021!"
+      POSTGRES_PASSWORD: "desafiomoss"
     ports:
-      - "15432:5432"
+      - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data

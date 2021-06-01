@@ -1,8 +1,11 @@
-package desafio_moss
+package main
 
 import (
+	"github.com/adailsonm/desafio-moss/api/handlers"
+	"github.com/adailsonm/desafio-moss/core/order"
 	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
@@ -11,10 +14,14 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	//middlewares - código que vai ser executado em todas as requests
-	//aqui podemos colocar logs, inclusão e validação de cabeçalhos, etc
+	db, err := gorm.Open(postgres.Open("postgres://postgres:desafiomoss@db/postgres"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	orderService := order.NewService(db)
 
 	//handlers
+	handlers.MakeOrderHandlers(r, orderService)
 
 	http.Handle("/", r)
 
@@ -25,7 +32,7 @@ func main() {
 		Handler:      http.DefaultServeMux,
 		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
