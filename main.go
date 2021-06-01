@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/adailsonm/desafio-moss/api/handlers"
 	"github.com/adailsonm/desafio-moss/core/order"
+	"github.com/adailsonm/desafio-moss/core/pizza"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,9 +20,11 @@ func main() {
 		log.Fatal(err)
 	}
 	orderService := order.NewService(db)
+	pizzaService := pizza.NewService(db)
 
 	//handlers
 	handlers.MakeOrderHandlers(r, orderService)
+	handlers.MakePizzzaHandlers(r, pizzaService)
 
 	http.Handle("/", r)
 
