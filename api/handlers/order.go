@@ -10,7 +10,7 @@ import (
 
 func MakeOrderHandlers(r *mux.Router, service *order.Service)  {
 	r.Handle("/v1/order", getAllOrder(service)).Methods("GET", "OPTIONS")
-	r.Handle("/v1/beer", storeOrder(service)).Methods("POST", "OPTIONS")
+	r.Handle("/v1/order", storeOrder(service)).Methods("POST", "OPTIONS")
 }
 
 func getAllOrder(service order.UseCase) http.Handler {
