@@ -1,7 +1,7 @@
 package order
 
 import (
-	"github.com/adailsonm/desafio-moss/core/pizza"
+	"encoding/json"
 	"time"
 )
 
@@ -10,8 +10,7 @@ type Order struct {
 	NumberOrder    string     `json:"number_order"`
 	ClientName    string     `json:"client_name"`
 	Address    string `json:"address"`
-	Pizzas    []*pizza.Pizza     `json:"pizzas"`
-	Price   float64 `json:"price"`
+	Pizzas    json.RawMessage     `json:"pizzas"`
 	EstimatedTimeOfArrival  time.Time  `json:"estimated_time_of_arrival"`
 	LastUpdate  time.Time `json:"last_update"`
 	Status OrderStatus `json:"status"`

@@ -2,7 +2,6 @@ package order
 
 import (
 	"database/sql"
-	"log"
 )
 
 type UseCase interface {
@@ -27,12 +26,21 @@ func (s *Service) Get(ID int64) (*Order, error) {
 }
 
 func (s *Service) Store(o *Order) error {
-	sqlStatement := `INSERT INTO order (number_order, client_name, address, pizzas, estimated_time_of_arrival, status)
-		VALUES ($1, $2, $3, $4, $5, $6)`
-	_, err := s.DB.Exec(sqlStatement, o.NumberOrder,o.ClientName, o.Address, o.Pizzas, o.EstimatedTimeOfArrival, o.Status)
+	tx, err := s.DB.Begin()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	stmt, err := tx.Prepare("INSERT INTO public.order (number_order, client_name, address, pizzas, estimated_time_of_arrival, status) VALUES ($1, $2, $3, $4, $5, $6)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(o.NumberOrder,o.ClientName, o.Address, o.Pizzas, o.EstimatedTimeOfArrival, o.Status)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
 	return nil
 }
 
