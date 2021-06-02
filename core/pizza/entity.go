@@ -8,4 +8,3 @@ type Pizza struct {
 	Ingredients json.RawMessage `json:"ingredients,omitempty"`
 	Price      float64       `json:"price"`
 }
-

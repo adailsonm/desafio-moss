@@ -9,6 +9,7 @@ type Order struct {
 	ID    uint     `json:"id"`
 	NumberOrder    string     `json:"number_order"`
 	ClientName    string     `json:"client_name"`
+	Address    string `json:"address"`
 	Pizzas    []*pizza.Pizza     `json:"pizzas"`
 	Price   float64 `json:"price"`
 	EstimatedTimeOfArrival  time.Time  `json:"estimated_time_of_arrival"`

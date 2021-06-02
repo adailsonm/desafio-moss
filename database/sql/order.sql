@@ -1,12 +1,13 @@
-create table "order"
+create table order
 (
-    id serial not null,
-    number_order varchar(100),
-    client_name varchar not null,
-    address text not null,
-    pizzas json not null,
+    id serial not null
+        constraint pizza_pk
+            primary key,
+    number_order varchar(100) not null,
+    client_name varchar(100) not null,
+    address varchar(150) not null,
+    price float8 not null,
     estimated_time_of_arrival timestamp not null,
-    last_update date default now() not null,
-    status int default 1 not null
+    last_update timestamp default now() not null,
+    status int not null
 );
-

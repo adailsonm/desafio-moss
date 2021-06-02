@@ -1,8 +1,8 @@
 package order
 
 import (
-	"gorm.io/gorm"
-	"time"
+	"database/sql"
+	"log"
 )
 
 type UseCase interface {
@@ -14,7 +14,7 @@ type UseCase interface {
 }
 
 type Service struct {
-	DB *gorm.DB
+	DB *sql.DB
 }
 
 func (s *Service) GetAll() ([]*Order, error) {
@@ -27,19 +27,11 @@ func (s *Service) Get(ID int64) (*Order, error) {
 }
 
 func (s *Service) Store(o *Order) error {
-	order := Order{
-		NumberOrder: o.NumberOrder,
-		ClientName: o.ClientName,
-		Pizzas: o.Pizzas,
-		Price: o.Price,
-		EstimatedTimeOfArrival: o.EstimatedTimeOfArrival,
-		LastUpdate: time.Now(),
-		Status: o.Status,
-	}
-
-	result := s.DB.Create(&order)
-	if result.Error != nil {
-		return result.Error
+	sqlStatement := `INSERT INTO order (number_order, client_name, address, pizzas, estimated_time_of_arrival, status)
+		VALUES ($1, $2, $3, $4, $5, $6)`
+	_, err := s.DB.Exec(sqlStatement, o.NumberOrder,o.ClientName, o.Address, o.Pizzas, o.EstimatedTimeOfArrival, o.Status)
+	if err != nil {
+		log.Fatal(err)
 	}
 	return nil
 }
@@ -52,7 +44,7 @@ func (s *Service) Remove(ID int64) error {
 	panic("implement me")
 }
 
-func NewService(db *gorm.DB) *Service {
+func NewService(db *sql.DB) *Service {
 	return &Service{
 		DB: db,
 	}

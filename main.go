@@ -1,12 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/adailsonm/desafio-moss/api/handlers"
 	"github.com/adailsonm/desafio-moss/core/order"
 	"github.com/adailsonm/desafio-moss/core/pizza"
 	"github.com/gorilla/mux"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 	"os"
@@ -15,10 +15,11 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	db, err := gorm.Open(postgres.Open("postgres://postgres:desafiomoss@db/postgres"))
+	db, err := sql.Open("postgres","postgres://postgres:desafiomoss@db/postgres?sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 	orderService := order.NewService(db)
 	pizzaService := pizza.NewService(db)
 
