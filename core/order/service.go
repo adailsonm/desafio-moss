@@ -2,11 +2,12 @@ package order
 
 import (
 	"database/sql"
+	"log"
 )
 
 type UseCase interface {
 	GetAll() ([]*Order, error)
-	Get(ID int64) (*Order, error)
+	Get(ID int64) (Order, error)
 	Store(o *Order) error
 	Update(o *Order) error
 	Remove(ID int64) error
@@ -21,8 +22,15 @@ func (s *Service) GetAll() ([]*Order, error) {
 }
 
 
-func (s *Service) Get(ID int64) (*Order, error) {
-	panic("implement me")
+func (s *Service) Get(ID int64) (Order, error) {
+	var order Order
+	sqlStatement := `SELECT * FROM order where id = $1`
+	err := s.DB.QueryRow(sqlStatement, ID).Scan(&order.ID, &order.NumberOrder, &order.ClientName,
+		&order.Address, &order.EstimatedTimeOfArrival, &order.Status, &order.Pizzas)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return order, nil
 }
 
 func (s *Service) Store(o *Order) error {
